@@ -221,13 +221,15 @@ export class Consumer extends TypedEventEmitter {
    * @param response The output from AWS SQS
    */
   private async handleSqsResponse(
-    response: ReceiveMessageCommandOutput
+      response: ReceiveMessageCommandOutput
   ): Promise<void> {
     if (hasMessages(response)) {
       if (this.handleMessageBatch) {
         await this.processMessageBatch(response.Messages);
       } else {
-        await Promise.all(response.Messages.map(this.processMessage));
+        for (const message of response.Messages) {
+          await this.processMessage(message);
+        }
       }
 
       this.emit('response_processed');
