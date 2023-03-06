@@ -392,16 +392,16 @@ export class Consumer extends TypedEventEmitter {
     try {
       let result;
 
-      if (this.handleMessageTimeout) {
-        const pending = new Promise((_, reject) => {
-          this.handleMessageTimeoutId = setTimeout((): void => {
-            reject(new TimeoutError());
-          }, this.handleMessageTimeout);
-        });
-        result = await Promise.race([this.handleMessage(message), pending]);
-      } else {
-        result = await this.handleMessage(message);
-      }
+      // if (this.handleMessageTimeout) {
+      //   const pending = new Promise((_, reject) => {
+      //     this.handleMessageTimeoutId = setTimeout((): void => {
+      //       reject(new TimeoutError());
+      //     }, this.handleMessageTimeout);
+      //   });
+      //   result = await Promise.race([this.handleMessage(message), pending]);
+      // } else {
+      result = await this.handleMessage(message);
+      // }
 
       return result instanceof Object ? result : message;
     } catch (err) {
